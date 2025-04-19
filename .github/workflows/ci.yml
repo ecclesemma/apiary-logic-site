@@ -12,31 +12,28 @@ jobs:
     name: Check & Log Repo Info
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: List project files
-        run: ls -la
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
 
-      - name: Check if live site is reachable
-        run: curl -I https://apiarylogic.com || echo "Site not live or deploy in progress"
+    - name: Set up Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
 
-      - name: Install link checker
-        run: |
-          curl -sSf https://raw.githubusercontent.com/lycheeverse/lychee/main/install.sh | bash -s -- --force
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+    - name: Install lychee
+      run: cargo install lychee
 
-      - name: Check for broken links
-        run: |
-          ~/.cargo/bin/lychee --config .lycheerc.yml --no-progress --no-wait --no-color
-     
-      - name: Run Lighthouse
-        run: |
-          npm install -g lighthouse
-          lighthouse https://apiarylogic.com --output html --output-path ./lighthouse-report.html --quiet
+    - name: Check for dead links
+      run: lychee ./**/*.html ./**/*.md
 
-      - name: Upload Lighthouse Report
-        uses: actions/upload-artifact@v3.1.3
-        with:
-          name: lighthouse-report
-          path: ./lighthouse-report.html
+    - name: Run accessibility tests
+      run: pa11y https://apiarylogic.com
+
+    - name: List files
+      run: ls -la
