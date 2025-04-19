@@ -20,6 +20,15 @@ jobs:
 
       - name: Check if live site is reachable
         run: curl -I https://apiarylogic.com || echo "Site not live or deploy in progress"
+      
+      - name: Create test file
+        run: echo "this is a test" > test-artifact.txt
+      
+      - name: Upload test artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-artifact
+          path: test-artifact.txt
 
       - name: Install link checker
         run: |
