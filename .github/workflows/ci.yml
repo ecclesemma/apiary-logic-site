@@ -28,8 +28,18 @@ jobs:
 
       - name: Check for broken links
         run: |
-          echo "Checking for broken links..."
-          lychee --config .lycheerc.yml --no-progress --no-wait --no-color
+          ~/.cargo/bin/lychee --config .lycheerc.yml --no-progress --no-wait --no-color
+     
+      - name: Run Lighthouse
+        run: |
+          npm install -g lighthouse
+          lighthouse https://apiarylogic.com --output html --output-path ./lighthouse-report.html --quiet
+
+      - name: Upload Lighthouse Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: lighthouse-report
+          path: ./lighthouse-report.html
 
       - name: Done
-        run: echo "CI step complete – you’re ready to build more workflows!"
+        run: echo "CI step complete"
