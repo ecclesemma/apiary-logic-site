@@ -1,0 +1,25 @@
+name: Basic CI Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  basic-check:
+    runs-on: ubuntu-latest
+    name: Check & Log Repo Info
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: List project files
+        run: ls -la
+
+      - name: Check if live site is reachable
+        run: curl -I https://apiarylogic.com || echo "Site not live or deploy in progress"
+
+      - name: Done
+        run: echo "CI step complete – you’re ready to build more workflows!"
