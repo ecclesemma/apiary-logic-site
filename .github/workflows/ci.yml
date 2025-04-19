@@ -25,8 +25,8 @@ jobs:
       run: cargo install lychee
 
     - name: Check for dead links
-      run: lychee ./**/*.html ./**/*.md
-
+      run: lychee . --exclude-path "https://formspree.io/f/xovegebo" --no-progress --exclude https://formspree.io/f/xovegebo
+    
     - name: Run accessibility tests
       run: pa11y https://apiarylogic.com
 
