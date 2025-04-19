@@ -21,5 +21,15 @@ jobs:
       - name: Check if live site is reachable
         run: curl -I https://apiarylogic.com || echo "Site not live or deploy in progress"
 
+      - name: Install link checker
+        run: |
+          curl -sSf https://raw.githubusercontent.com/lycheeverse/lychee/main/install.sh | bash -s -- --force
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Check for broken links
+        run: |
+          echo "Checking for broken links..."
+          lychee --config .lycheerc.yml --no-progress --no-wait --no-color
+
       - name: Done
         run: echo "CI step complete – you’re ready to build more workflows!"
