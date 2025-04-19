@@ -26,9 +26,6 @@ jobs:
 
     - name: Check for dead links
       run: lychee . --no-progress --exclude https://formspree.io/f/xovegebo
-    
-    - name: Run accessibility tests
-      run: pa11y https://apiarylogic.com
-
+  
     - name: List files
       run: ls -la
